@@ -1,0 +1,32 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier . -w --loglevel warn && xo --fix",
+    "test-api": "node --conditions development test.js",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --conditions development test.js"
+  },
+  "devDependencies": {
+    "c8": "^7.0.0",
+    "prettier": "^2.0.0",
+    "tape": "^5.0.0",
+    "xo": "^0.50.0"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "semi": false,
+    "trailingComma": "none"
+  },
+  "xo": {
+    "prettier": true
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
