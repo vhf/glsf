@@ -16,6 +16,7 @@ Ideally, a visual tool producing a `gallery` structured document would be provid
 
 ## elements
 
+* paragraph
 * heading
   - level
     - 1
@@ -24,7 +25,6 @@ Ideally, a visual tool producing a `gallery` structured document would be provid
     - 4
     - 5
     - 6
-* paragraph
 * media container
   - layout
     - 1
@@ -36,13 +36,17 @@ Ideally, a visual tool producing a `gallery` structured document would be provid
     - 4x4
     - 1-2
     - 2-1
-  > media
-    - token (id+contract)
+  > token
+    - id
+    - contract
   > caption
 * quote
 * hero
 * column container
 * table
+* image
+  - aspect-ratio
+    - x/y
 
 ### notes
 * heading/paragraph/quote content is in-line markdown

@@ -1,0 +1,39 @@
+{
+  "name": "glsf",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier . -w --loglevel warn && xo --fix",
+    "test": "node --conditions development test.js",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --conditions development test.js"
+  },
+  "devDependencies": {
+    "c8": "^7.0.0",
+    "prettier": "^2.0.0",
+    "tape": "^5.0.0",
+    "xo": "^0.50.0"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "semi": false,
+    "trailingComma": "none"
+  },
+  "xo": {
+    "prettier": true
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hast-util-to-html": "^8.0.3",
+    "hastscript": "^7.0.2",
+    "unist-builder": "^3.0.0",
+    "unist-util-map": "^3.1.1",
+    "unist-util-visit": "^4.1.0"
+  }
+}
