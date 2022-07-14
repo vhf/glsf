@@ -46,17 +46,49 @@ export const render = (tree) =>
     }
 
     if (node.type === 'media-container') {
-      return h(
-        'div',
-        {...getAttrs(node), class: 'media-container'},
-        node.children
-      )
+      const layout = node.layout || '1x1'
+      const containers = []
+
+      // this is dumb, see https://tailwindcss.com/docs/grid-template-columns
+      if (layout.includes('x')) {
+        const [cols, rows] = layout.split('x').map((x) => Number.parseInt(x))
+
+        let childIndex = 0
+        for (let row = 0; row < rows; row++) {
+          const children = []
+          for (let col = 0; col < cols; col++) {
+            children.push(node.children[childIndex])
+            childIndex++
+          }
+
+          containers.push(h('div', {class: 'row'}, children))
+        }
+      } else if (layout.includes('-')) {
+
+        const onRow = layout.split('-').map((x) => Number.parseInt(x))
+
+        let childIndex = 0
+        for (let row = 0; row < 2; row++) {
+          const children = []
+          for (let col = 0; col < onRow[row]; col++) {
+            children.push(node.children[childIndex])
+            childIndex++
+          }
+
+          containers.push(h('div', {class: 'row'}, children))
+        }
+      }
+
+      Object.assign(node, {children: containers})
+
+      return h('div', {...getAttrs(node), class: 'media-container'}, node.children)
     }
 
     if (node.type === 'image') {
-      const attrs = {src: node.attrs.src}
-      if (node.attrs['aspect-ratio']) {
-        attrs.style = `aspect-ratio: ${node.attrs['aspect-ratio']}`
+      const attrs = {src: node.url}
+
+      if (node['aspect-ratio']) {
+        attrs.style = `aspect-ratio: ${node['aspect-ratio']}`
       }
 
       return h('img', attrs)

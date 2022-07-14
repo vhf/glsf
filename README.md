@@ -27,10 +27,7 @@ Ideally, a visual tool producing a `gallery` structured document would be provid
     - 6
 * media container
   - layout
-    - 1
-    - 2
-    - 3
-    - 4
+    - undefined (default)
     - 2x2
     - 3x3
     - 4x4
