@@ -1,29 +1,9 @@
-import {u} from 'unist-builder'
-import {visit} from 'unist-util-visit'
 import {map} from 'unist-util-map'
-import {h, s} from 'hastscript'
-import {toHtml} from 'hast-util-to-html'
-
-// Const tree = u('root', [
-//   u('subtree', {id: 1}),
-//   u('subtree', {id: 2}, [
-//     u('node', [u('leaf', 'leaf 1'), u('leaf', 'leaf 2')]),
-//     u('leaf', {id: 3}, 'leaf 3'),
-//     u('void', {id: 4, lol: true})
-//   ])
-// ])
-
-// console.dir(tree, {depth: null})
-
-// visit(tree, (node) => {
-//   console.log(node)
-// })
-// visit(tree, 'leaf', (node) => {
-//   console.log(node)
-// })
+import {h} from 'hastscript'
 
 const getAttrs = (node) => {
   const nodeAttrs = new Set(['type', 'children', 'value'])
+  // eslint-disable-next-line unicorn/no-array-reduce
   Object.entries(node).reduce((attrs, [key, value]) => {
     if (nodeAttrs.has(key)) return attrs
     attrs[key] = value
@@ -33,6 +13,8 @@ const getAttrs = (node) => {
 
 export const render = (tree) =>
   map(tree, (node) => {
+    // Very basic, we match each node type and transform it to a HAST node, the result HAST tree
+    // can then be stringified, producing HTML
     if (node.type === 'root') {
       return h('div', getAttrs(node), node.children)
     }
@@ -49,9 +31,10 @@ export const render = (tree) =>
       const layout = node.layout || '1x1'
       const containers = []
 
-      // this is dumb, see https://tailwindcss.com/docs/grid-template-columns
       if (layout.includes('x')) {
-        const [cols, rows] = layout.split('x').map((x) => Number.parseInt(x))
+        const [cols, rows] = layout
+          .split('x')
+          .map((x) => Number.parseInt(x, 10))
 
         let childIndex = 0
         for (let row = 0; row < rows; row++) {
@@ -64,8 +47,7 @@ export const render = (tree) =>
           containers.push(h('div', {class: 'row'}, children))
         }
       } else if (layout.includes('-')) {
-
-        const onRow = layout.split('-').map((x) => Number.parseInt(x))
+        const onRow = layout.split('-').map((x) => Number.parseInt(x, 10))
 
         let childIndex = 0
         for (let row = 0; row < 2; row++) {
@@ -81,7 +63,11 @@ export const render = (tree) =>
 
       Object.assign(node, {children: containers})
 
-      return h('div', {...getAttrs(node), class: 'media-container'}, node.children)
+      return h(
+        'div',
+        {...getAttrs(node), class: 'media-container'},
+        node.children
+      )
     }
 
     if (node.type === 'image') {

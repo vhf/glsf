@@ -1,6 +1,5 @@
 import test from 'tape'
 import dedent from 'dedent'
-import {toHtml} from 'hast-util-to-html'
 import {inspectNoColor} from 'unist-util-inspect'
 import {
   doc,
@@ -11,12 +10,44 @@ import {
   image
 } from './index.js'
 
+test('doc attributes', (t) => {
+  const tree = doc(
+    [
+      heading('Title', {level: 1}),
+      heading('Subtitle', {level: 2}),
+      paragraph('Welcome')
+    ],
+    {version: '0.1.2', generatedBy: 'Some Tool <http://example.com>'}
+  )
+
+  t.deepEqual(
+    tree,
+    {
+      type: 'root',
+      version: '0.1.2',
+      generatedBy: 'Some Tool <http://example.com>',
+      children: [
+        {type: 'heading', level: 1, children: [{type: 'text', value: 'Title'}]},
+        {
+          type: 'heading',
+          level: 2,
+          children: [{type: 'text', value: 'Subtitle'}]
+        },
+        {type: 'paragraph', children: [{type: 'text', value: 'Welcome'}]}
+      ]
+    },
+    'should be ok'
+  )
+  t.end()
+})
+
 test('build tree #1', (t) => {
   const tree = doc([
     heading('Title', {level: 1}),
     heading('Subtitle', {level: 2}),
     paragraph('Welcome')
   ])
+
   t.deepEqual(
     tree,
     {
@@ -116,14 +147,13 @@ test('render mediaContainer 2x2', (t) => {
   t.end()
 })
 
-
 test('render mediaContainer 1-2', (t) => {
   const tree = doc([
     mediaContainer(
       [
         image('https://api.lorem.space/image/fashion?w=650&h=150'),
         image('https://api.lorem.space/image/fashion?w=150&h=150'),
-        image('https://api.lorem.space/image/fashion?w=250&h=150'),
+        image('https://api.lorem.space/image/fashion?w=250&h=150')
       ],
       {layout: '1-2'}
     )
@@ -134,20 +164,20 @@ test('render mediaContainer 1-2', (t) => {
   t.deepEqual(
     inspectNoColor(hast),
     dedent`
-    element<div>[1]
-    │ properties: {}
-    └─0 element<div>[2]
-        │ properties: {"className":["media-container"]}
-        ├─0 element<div>[1]
-        │   │ properties: {"className":["row"]}
-        │   └─0 element<img>[0]
-        │         properties: {"src":"https://api.lorem.space/image/fashion?w=650&h=150"}
-        └─1 element<div>[2]
-            │ properties: {"className":["row"]}
-            ├─0 element<img>[0]
-            │     properties: {"src":"https://api.lorem.space/image/fashion?w=150&h=150"}
-            └─1 element<img>[0]
-                  properties: {"src":"https://api.lorem.space/image/fashion?w=250&h=150"}
+      element<div>[1]
+      │ properties: {}
+      └─0 element<div>[2]
+          │ properties: {"className":["media-container"]}
+          ├─0 element<div>[1]
+          │   │ properties: {"className":["row"]}
+          │   └─0 element<img>[0]
+          │         properties: {"src":"https://api.lorem.space/image/fashion?w=650&h=150"}
+          └─1 element<div>[2]
+              │ properties: {"className":["row"]}
+              ├─0 element<img>[0]
+              │     properties: {"src":"https://api.lorem.space/image/fashion?w=150&h=150"}
+              └─1 element<img>[0]
+                    properties: {"src":"https://api.lorem.space/image/fashion?w=250&h=150"}
     `,
     'should be ok'
   )
