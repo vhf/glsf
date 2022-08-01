@@ -4,6 +4,7 @@
   "description": "",
   "source": "src/index.html",
   "scripts": {
+    "lint": "eslint . --fix",
     "start": "parcel",
     "build": "parcel build",
     "postinstall": "npm link ../glsf"
@@ -14,6 +15,9 @@
   "devDependencies": {
     "@parcel/transformer-sass": "^2.6.2",
     "@tailwindcss/typography": "^0.5.4",
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
     "parcel": "^2.6.2",
     "postcss": "^8.4.14",
     "postcss-nesting": "^10.1.10",
