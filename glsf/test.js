@@ -121,28 +121,31 @@ test('render mediaContainer 2x2', (t) => {
   ]);
 
   const hast = render(tree);
+
   t.deepEqual(
     inspectNoColor(hast),
     dedent`
       element<div>[1]
       │ properties: {}
-      └─0 element<div>[1]
-          │ properties: {"className":["media-container"]}
-          └─0 element<div>[4]
-              │ properties: {"className":["layout-2x2"]}
+      └─0 element<div>[2]
+          │ properties: {"className":["media-container","layout-2x2"]}
+          ├─0 element<div>[2]
+          │   │ properties: {"className":["row","row-1"]}
+          │   ├─0 element<div>[1]
+          │   │   │ properties: {"className":["item-1"]}
+          │   │   └─0 element<img>[0]
+          │   │         properties: {"src":"https://api.lorem.space/image/fashion?w=650&h=150"}
+          │   └─1 element<div>[1]
+          │       │ properties: {"className":["item-2"]}
+          │       └─0 element<img>[0]
+          │             properties: {"src":"https://api.lorem.space/image/fashion?w=150&h=150"}
+          └─1 element<div>[2]
+              │ properties: {"className":["row","row-2"]}
               ├─0 element<div>[1]
-              │   │ properties: {"className":["item-1"]}
-              │   └─0 element<img>[0]
-              │         properties: {"src":"https://api.lorem.space/image/fashion?w=650&h=150"}
-              ├─1 element<div>[1]
-              │   │ properties: {"className":["item-2"]}
-              │   └─0 element<img>[0]
-              │         properties: {"src":"https://api.lorem.space/image/fashion?w=150&h=150"}
-              ├─2 element<div>[1]
               │   │ properties: {"className":["item-3"]}
               │   └─0 element<img>[0]
               │         properties: {"src":"https://api.lorem.space/image/fashion?w=250&h=150"}
-              └─3 element<div>[1]
+              └─1 element<div>[1]
                   │ properties: {"className":["item-4"]}
                   └─0 element<img>[0]
                         properties: {"src":"https://api.lorem.space/image/fashion?w=150&h=150"}
@@ -171,19 +174,21 @@ test('render mediaContainer 1-2', (t) => {
     dedent`
       element<div>[1]
       │ properties: {}
-      └─0 element<div>[1]
-          │ properties: {"className":["media-container"]}
-          └─0 element<div>[3]
-              │ properties: {"className":["layout-1-2"]}
+      └─0 element<div>[2]
+          │ properties: {"className":["media-container","layout-1-2"]}
+          ├─0 element<div>[1]
+          │   │ properties: {"className":["row","row-1"]}
+          │   └─0 element<div>[1]
+          │       │ properties: {"className":["item-1"]}
+          │       └─0 element<img>[0]
+          │             properties: {"src":"https://api.lorem.space/image/fashion?w=650&h=150"}
+          └─1 element<div>[2]
+              │ properties: {"className":["row","row-2"]}
               ├─0 element<div>[1]
-              │   │ properties: {"className":["item-1"]}
-              │   └─0 element<img>[0]
-              │         properties: {"src":"https://api.lorem.space/image/fashion?w=650&h=150"}
-              ├─1 element<div>[1]
               │   │ properties: {"className":["item-2"]}
               │   └─0 element<img>[0]
               │         properties: {"src":"https://api.lorem.space/image/fashion?w=150&h=150"}
-              └─2 element<div>[1]
+              └─1 element<div>[1]
                   │ properties: {"className":["item-3"]}
                   └─0 element<img>[0]
                         properties: {"src":"https://api.lorem.space/image/fashion?w=250&h=150"}

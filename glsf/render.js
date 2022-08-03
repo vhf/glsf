@@ -10,42 +10,51 @@ const getAttrs = (node) => {
   }, {});
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export const render = (tree) => map(tree, (node) => {
-  // Very basic, we match each node type and transform it to a HAST node, the result HAST tree
-  // can then be stringified, producing HTML
-  if (node.type === 'root') {
-    return h('div', getAttrs(node), node.children);
-  }
+// Very basic, we match each node type and transform it to a HAST node, the result HAST tree
+// can then be stringified, producing HTML
+const nodeRenderer = {
+  root: (node) => h('div', getAttrs(node), node.children),
 
-  if (node.type === 'paragraph') {
-    return h('p', getAttrs(node), node.children);
-  }
+  paragraph: (node) => h('p', getAttrs(node), node.children),
 
-  if (node.type === 'heading') {
-    return h(`h${node.level}`, getAttrs(node), node.children);
-  }
+  heading: (node) => h(`h${node.level}`, getAttrs(node), node.children),
 
-  if (node.type === 'media-container') {
+  'media-container': (node) => {
     const layout = node.layout || '1x1';
-    const containers = [];
 
-    const children = [];
-    for (let childIndex = 0; childIndex < node.children.length; childIndex++) {
-      children.push(h('div', { class: `item-${childIndex + 1}` }, [node.children[childIndex]]));
+    let rows;
+    let onRow;
+    if (layout.includes('x')) {
+      [onRow, rows] = layout.split('x').map((x) => parseInt(x, 10));
+      onRow = new Array(rows).fill(onRow);
+    } else if (layout.includes('-')) {
+      onRow = layout.split('-').map((x) => parseInt(x, 10));
+      rows = 2;
+    } else {
+      throw new Error(`Invalid layout ${layout}`);
     }
-    containers.push(h('div', { class: `layout-${layout}` }, children));
+
+    const containers = [];
+    let childIndex = 0;
+    for (let i = 0; i < rows; i++) {
+      const row = [];
+      for (let j = 0; j < onRow[i]; j++) {
+        row.push(h('div', { class: `item-${childIndex + 1}` }, [node.children[childIndex]]));
+        childIndex++;
+      }
+      containers.push(h('div', { class: `row row-${i + 1}` }, row));
+    }
 
     Object.assign(node, { children: containers });
 
     return h(
       'div',
-      { ...getAttrs(node), class: 'media-container' },
+      { ...getAttrs(node), class: `media-container layout-${layout}` },
       node.children,
     );
-  }
+  },
 
-  if (node.type === 'image') {
+  image: (node) => {
     const attrs = { src: node.url };
 
     if (node['aspect-ratio']) {
@@ -53,7 +62,13 @@ export const render = (tree) => map(tree, (node) => {
     }
 
     return h('img', attrs);
-  }
+  },
+};
 
-  return node;
+// eslint-disable-next-line import/prefer-default-export
+export const render = (tree) => map(tree, (node) => {
+  if (!nodeRenderer[node.type]) {
+    return node;
+  }
+  return nodeRenderer[node.type](node);
 });

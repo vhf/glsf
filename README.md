@@ -87,6 +87,7 @@ document.getElementById('foo').innerHTML = html
     - 3x3
     - 4x4
     - 1-2
+    - 1-3
     - 2-1
 * tezos-storage-pointer -- see <https://github.com/fxhash/specifications/blob/main/general/tezos-storage-pointers.md>
 * caption

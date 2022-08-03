@@ -22,20 +22,20 @@
   margin: 0;
 }
 
-.my-glsf-style .media-container {}
+
+.my-glsf-style .media-container {
+  margin: 5px;
+}
+
+.my-glsf-style .media-container img {
+  width: 100%;
+  padding: 5px;
+}
+
+.my-glsf-style .media-container .row {
+  display: flex;
+}
 
 .my-glsf-style .media-container div {
-  text-align: center;
-}
-
-.my-glsf-style .media-container .layout-1-2 {
-  @apply grid grid-cols-2 grid-rows-2 items-stretch place-items-stretch gap-4;
-}
-
-.my-glsf-style .media-container .layout-1-2 .item-1 {
-  @apply col-span-2;
-}
-
-.my-glsf-style .media-container .layout-2x2 {
-  @apply grid grid-cols-2 grid-rows-2 gap-4;
+  flex: 100%;
 }
