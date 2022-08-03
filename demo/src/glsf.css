@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.my-glsf-style {
+  @apply prose;
+  max-width: 80%;
+}
+
+.my-glsf-style .column-container {
+  display: flex;
+}
+
+.my-glsf-style .column-container .column {
+  flex: 100%;
+}
+
+.my-glsf-style .column-container .column p:first-child {
+  margin-top: 5px;
+}
+
+.my-glsf-style img {
+  margin: 0;
+}
+
+.my-glsf-style .media-container {
+  margin: 5px;
+}
+
+.my-glsf-style .media-container img {
+  width: 100%;
+  padding: 5px;
+}
+
+.my-glsf-style .media-container .row {
+  display: flex;
+}
+
+.my-glsf-style .media-container div {
+  flex: 100%;
+}
