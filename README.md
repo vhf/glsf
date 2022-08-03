@@ -17,7 +17,7 @@ Ideally, a visual tool producing a `gallery` structured document would be provid
 ## this repo
 
 * [./glsf](./glsf) Draft lib, early PoC
-* [./demo](./demo) Demo renderer, very early PoC
+* [./demo](./demo) Demo renderer, very early PoC, live demo: <https://draft.li/glsf/>
 
 # example
 
@@ -97,6 +97,7 @@ document.getElementById('foo').innerHTML = html
 * quote
 * hero
 * column container
+* column
 * table
 ```
 

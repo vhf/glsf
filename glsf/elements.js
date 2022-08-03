@@ -6,3 +6,5 @@ export const heading = (text, attrs) => u('heading', attrs, [u('text', text)]);
 export const mediaContainer = (content, attrs) => u('media-container', attrs, content);
 export const token = (tezosStoragePointer) => u('token', tezosStoragePointer);
 export const image = (url, attrs) => u('image', { ...attrs, url });
+export const column = (content, attrs) => u('column', attrs, content);
+export const columnContainer = (content, attrs) => u('column-container', attrs, content);

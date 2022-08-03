@@ -54,6 +54,10 @@ const nodeRenderer = {
     );
   },
 
+  column: (node) => h('div', { ...getAttrs(node), class: 'column' }, node.children),
+
+  'column-container': (node) => h('div', { ...getAttrs(node), class: 'column-container' }, node.children),
+
   image: (node) => {
     const attrs = { src: node.url };
 

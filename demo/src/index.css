@@ -12,16 +12,25 @@
   white-space: pre-wrap;
 }
 
-
 .my-glsf-style {
   @apply prose;
 }
 
-.my-glsf-style img {
-  @apply inline;
-  margin: 0;
+.my-glsf-style .column-container {
+  display: flex;
 }
 
+.my-glsf-style .column-container .column {
+  flex: 100%;
+}
+
+.my-glsf-style .column-container .column p:first-child {
+  margin-top: 5px;
+}
+
+.my-glsf-style img {
+  margin: 0;
+}
 
 .my-glsf-style .media-container {
   margin: 5px;
