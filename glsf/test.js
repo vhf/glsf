@@ -5,7 +5,7 @@ import {
   doc,
   heading,
   paragraph,
-  render,
+  glsfToHast,
   mediaContainer,
   image,
 } from './index.js';
@@ -67,47 +67,54 @@ test('build tree #1', (t) => {
   t.end();
 });
 
-test('render tree #1', (t) => {
+test('glsfToHast tree #1', (t) => {
   const tree = doc([
-    heading('Title', { level: 1 }),
-    heading('Subtitle', { level: 2 }),
-    paragraph('Welcome'),
+    heading('Ti**tle**', { level: 1 }),
+    heading('Subtitle [1](/foo)', { level: 2 }),
+    paragraph('#welcome'),
   ]);
 
-  const hast = render(tree);
+  const hast = glsfToHast(tree);
+
   t.deepEqual(
-    hast,
-    {
-      type: 'element',
-      tagName: 'div',
-      properties: {},
-      children: [
-        {
-          type: 'element',
-          tagName: 'h1',
-          properties: {},
-          children: [{ type: 'text', value: 'Title' }],
-        },
-        {
-          type: 'element',
-          tagName: 'h2',
-          properties: {},
-          children: [{ type: 'text', value: 'Subtitle' }],
-        },
-        {
-          type: 'element',
-          tagName: 'p',
-          properties: {},
-          children: [{ type: 'text', value: 'Welcome' }],
-        },
-      ],
-    },
+    inspectNoColor(hast),
+    dedent`
+      element<div>[3]
+      │ properties: {}
+      ├─0 element<h1>[1]
+      │   │ properties: {}
+      │   └─0 element<span>[1]
+      │       │ properties: {}
+      │       └─0 element<p>[2]
+      │           │ properties: {}
+      │           ├─0 text "Ti"
+      │           └─1 element<strong>[1]
+      │               │ properties: {}
+      │               └─0 text "tle"
+      ├─1 element<h2>[1]
+      │   │ properties: {}
+      │   └─0 element<span>[1]
+      │       │ properties: {}
+      │       └─0 element<p>[2]
+      │           │ properties: {}
+      │           ├─0 text "Subtitle "
+      │           └─1 element<a>[1]
+      │               │ properties: {"href":"/foo"}
+      │               └─0 text "1"
+      └─2 element<p>[1]
+          │ properties: {}
+          └─0 element<span>[1]
+              │ properties: {}
+              └─0 element<p>[1]
+                  │ properties: {}
+                  └─0 text "#welcome"
+    `,
     'should be ok',
   );
   t.end();
 });
 
-test('render mediaContainer 2x2', (t) => {
+test('glsfToHast mediaContainer 2x2', (t) => {
   const tree = doc([
     mediaContainer(
       [
@@ -120,7 +127,7 @@ test('render mediaContainer 2x2', (t) => {
     ),
   ]);
 
-  const hast = render(tree);
+  const hast = glsfToHast(tree);
 
   t.deepEqual(
     inspectNoColor(hast),
@@ -155,7 +162,7 @@ test('render mediaContainer 2x2', (t) => {
   t.end();
 });
 
-test('render mediaContainer 1-2', (t) => {
+test('glsfToHast mediaContainer 1-2', (t) => {
   const tree = doc([
     mediaContainer(
       [
@@ -167,7 +174,7 @@ test('render mediaContainer 1-2', (t) => {
     ),
   ]);
 
-  const hast = render(tree);
+  const hast = glsfToHast(tree);
 
   t.deepEqual(
     inspectNoColor(hast),

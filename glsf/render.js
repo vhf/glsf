@@ -1,5 +1,21 @@
-import { map } from 'unist-util-map';
+import { fromMarkdown } from 'mdast-util-from-markdown';
 import { h } from 'hastscript';
+import { inspectNoColor } from 'unist-util-inspect';
+import { map } from 'unist-util-map';
+import { removePosition } from 'unist-util-remove-position';
+import { sanitize, defaultSchema } from 'hast-util-sanitize';
+import { toHast } from 'mdast-util-to-hast';
+import { toHtml } from 'hast-util-to-html';
+import deepmerge from 'deepmerge';
+
+const phrasingHast = deepmerge(defaultSchema, {
+  tagNames: [
+    'em',
+    'strong',
+    'a',
+    'strike',
+  ],
+});
 
 const getAttrs = (node) => {
   const nodeAttrs = new Set(['type', 'children', 'value']);
@@ -67,12 +83,28 @@ const nodeRenderer = {
 
     return h('img', attrs);
   },
+
+  text: (node) => {
+    const mdast = fromMarkdown(node.value);
+    const hast = toHast(mdast);
+    // get the only child of "root", a "p"
+    const content = hast.children[0];
+    // make it a "span" instead
+    return sanitize(h('span', content.children), phrasingHast);
+  },
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export const render = (tree) => map(tree, (node) => {
+export const glsfToHast = (tree) => removePosition(map(tree, (node) => {
   if (!nodeRenderer[node.type]) {
     return node;
   }
   return nodeRenderer[node.type](node);
-});
+}));
+
+export const glsfToHtml = (tree) => {
+  const hast = glsfToHast(tree);
+  const html = toHtml(hast);
+  return html;
+};
+
+export const inspectHast = (tree) => inspectNoColor(glsfToHast(tree));
